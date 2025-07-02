@@ -1,0 +1,15 @@
+Package: fasTCGA
+Type: Package
+Title: faster, easier TCGA analysis
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Yuhan", "Sun",
+      email = "yzsun0123@gmail.com",
+      role = c("aut", "cre")
+    )
+  )
+Description: fasTCGA is an R package tailored for efficient preprocessing of The human cancer atlas (TCGA) RNA-seq data. It automatically integrates multiple read count files into a single expression matrix and performs TMM normalization — all within seconds — enabling fast and reproducible downstream analysis.
+License: GPL
+Encoding: UTF-8
+LazyData: true
