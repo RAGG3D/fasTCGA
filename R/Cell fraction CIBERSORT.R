@@ -13,7 +13,7 @@
 #' @param c1 is the name of the column contains sample names
 #' @param c2 is the name of the column contains gene symbols
 #' @param c3 is the name of the column contains raw read counts
-#' @param ref is the data frame of signature matrix
+#' @param ref is the data frame of signature matrix, see data/my_ref.rds
 #' @param meth is the method, default "cibersort"
 #' @paramact is the action var, default "get"
 #' @return a data frame...
