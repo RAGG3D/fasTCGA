@@ -14,7 +14,8 @@
 #   Test Package:              'Ctrl + Shift + T'
 #' My function called sets
 #'
-#' @param .cancerfolder is the address
+#' @param .foldername is the folder name to save and resource TCGA data
+#' @param .project_name is the name of a TCGA project
 #' @return a data frame...
 #'
 #' @import dplyr
@@ -27,16 +28,21 @@
 #' @export
 
 #Download the STAR read count files from TCGA database
-TCGA_STAR_download <- function(.folder, .project_name){
-  dir.create(.folder)
+#If you get errors do:
+#remotes::install_github("https://github.com/BioinformaticsFMRP/TCGAbiolinks",ref = "devel")
+TCGA_STAR_download <- function(.foldername, .project_name){
+  dir.create(.foldername)
   query <- TCGAbiolinks::GDCquery(project = .project_name,
                     data.category =  "Transcriptome Profiling",
                     data.type = "Gene Expression Quantification",
                     workflow.type = "STAR - Counts")
-  TCGAbiolinks::GDCdownload(query, .folder)
+  TCGAbiolinks::GDCdownload(query, .foldername)
   TCGAbiolinks::getResults(query) %>%
-    write.csv(file = paste0(.folder,"GDCdata/", .project_name, "/sample_sheet.csv"), col.names = F)
-}
+    write.csv(file = paste0(.foldername,"GDCdata/", .project_name, "/sample_sheet.csv"), col.names = F)
+  GDCquery_clinic(project = .project_name, type = "clinical") %>%
+    write.csv(file = paste0(.foldername,"GDCdata/", .project_name, "/clinical.csv"), col.names = F)
+
+  }
 
 
 
