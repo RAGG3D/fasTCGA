@@ -9,15 +9,12 @@
 #   Test Package:              'Ctrl + Shift + T'
 #' My function called sets
 #'
-#' @param .cancerfolder is the address
+#' @param .data is a data frame contains a column named "sample" with TCGA barcodes
+#' @param .foldername is the folder name to save and resource TCGA data
+#' @param .project_name is the name of a TCGA project
 #' @return a data frame...
 #'
 #' @import dplyr
-#' @import tidyverse
-#' @import tidybulk
-#' @import tibble
-#' @import purrr
-#' @import TCGAbiolinks
 #'
 #' @export
 
