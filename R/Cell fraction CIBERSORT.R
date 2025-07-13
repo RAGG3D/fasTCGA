@@ -29,7 +29,7 @@
 CIBERSORT <- function(x, c1, c2, c3, ref,
                       meth = "cibersort",
                       act = "get") {
-  tibble::as_tibble(setDT(x)[, lapply(.SD, sum), by = c(c1, c2), .SDcols = c3]) %>%
+  tibble::as_tibble(setDT(x)[, lapply(.SD, sum), by = c(c1, c2), .SDcols = c3]) |>
     tidybulk::deconvolve_cellularity(
       .sample = !!sym(c1),
       .transcript = !!sym(c2),

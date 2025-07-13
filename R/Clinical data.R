@@ -19,11 +19,11 @@
 #' @export
 
 clinical_combine <- function(.data, .foldername, .project_name) {
-  .data %>%
-    dplyr::inner_join(read.csv(paste0(.foldername,"GDCdata/", .project_name, "/clinical.csv")), by = c("sample" = "submitter_id"))%>%
-    dplyr::mutate(total_living_days = as.numeric(as.character(days_to_death)), age = -as.numeric(as.character(days_to_birth))/365) %>%
-    dplyr::mutate(na = is.na(total_living_days)) %>%
-    dplyr::mutate(total_living_days = ifelse(na == "TRUE", as.numeric(as.character(days_to_last_follow_up)), total_living_days)) %>%
+  .data |>
+    dplyr::inner_join(read.csv(paste0(.foldername,"GDCdata/", .project_name, "/clinical.csv")), by = c("sample" = "submitter_id"))|>
+    dplyr::mutate(total_living_days = as.numeric(as.character(days_to_death)), age = -as.numeric(as.character(days_to_birth))/365) |>
+    dplyr::mutate(na = is.na(total_living_days)) |>
+    dplyr::mutate(total_living_days = ifelse(na == "TRUE", as.numeric(as.character(days_to_last_follow_up)), total_living_days)) |>
     dplyr::mutate(vital_status = ifelse(vital_status == "Dead", 1, 0))}
 
 

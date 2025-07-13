@@ -32,14 +32,15 @@
 #remotes::install_github("https://github.com/BioinformaticsFMRP/TCGAbiolinks",ref = "devel")
 TCGA_STAR_download <- function(.foldername, .project_name){
   dir.create(.foldername)
+  setwd(.foldername)
   query <- TCGAbiolinks::GDCquery(project = .project_name,
                     data.category =  "Transcriptome Profiling",
                     data.type = "Gene Expression Quantification",
                     workflow.type = "STAR - Counts")
   TCGAbiolinks::GDCdownload(query, .foldername)
-  TCGAbiolinks::getResults(query) %>%
+  TCGAbiolinks::getResults(query) |>
     write.csv(file = paste0(.foldername,"GDCdata/", .project_name, "/sample_sheet.csv"), col.names = F)
-  GDCquery_clinic(project = .project_name, type = "clinical") %>%
+  TCGAbiolinks::GDCquery_clinic(project = .project_name, type = "clinical") |>
     write.csv(file = paste0(.foldername,"GDCdata/", .project_name, "/clinical.csv"), col.names = F)
 
   }
@@ -54,15 +55,19 @@ TCGA_transcript <- function(.foldername, .project_name){
       purrr::map_dfr(as.list(list.files(.cancerfolder)),
                      function(i){
                        j = list.files(paste0(.cancerfolder, "/", i))
-                       data.table::fread(paste0(.cancerfolder,"/", i, "/", j)) %>%
-                         na.omit() %>%
+                       data.table::fread(paste0(.cancerfolder,"/", i, "/", j)) |>
+                         na.omit() |>
                          dplyr::mutate(id = i)
-                     }) %>%
-        dplyr::inner_join(read_csv(paste0(.foldername,"GDCdata/", .project_name, "/sample_sheet.csv"))) %>%
+                     }) |>
+        dplyr::inner_join(read_csv(paste0(.foldername,"GDCdata/", .project_name, "/sample_sheet.csv"))) |>
         tidybulk::rename(raw_count = unstranded,
                          symbol = gene_name,
-                         sample = cases.submitter_id) %>%
+                         sample = cases.submitter_id) |>
         dplyr::select(sample, symbol, raw_count)
-    )[, list(raw_count = sum(raw_count)), by = c("sample", "symbol")]) %>%  #Sum the raw_counts of duplicated rows
+    )[, list(raw_count = sum(raw_count)), by = c("sample", "symbol")]) |>  #Sum the raw_counts of duplicated rows
     tidybulk::scale_abundance(.sample = sample, .abundance = raw_count, .transcript = symbol)
 }
+
+
+#A S3 method outputting normal/tumor data
+
